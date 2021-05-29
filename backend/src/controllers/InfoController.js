@@ -10,8 +10,7 @@ module.exports = {
     const nomeInfo = await knex('infos').insert(info);
     return response.json({
       success: true,
-      nome: nomeInfo[0],
-      ...info
+      nome: nomeInfo[0]
     });
 
   },
@@ -20,8 +19,14 @@ module.exports = {
     const nome = request.body.nome;
     const chave = request.body.chave;
     const info = await knex('infos').where({ nome: nome }).select('*').first();
-    if (chave == deCriptoChave(info.chave))
-      return response.json(info);
+    if (chave == deCriptoChave(info.chave)) {
+      const infoResp = {
+        totalPorcoes: info.totalPorcoes,
+        ultimaPorcao: info.ultimaPorcao,
+        status: info.status
+      }
+      return response.json(infoResp);
+    }
 
     return response.json({
       success: false
