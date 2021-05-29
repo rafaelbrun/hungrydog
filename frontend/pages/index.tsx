@@ -8,8 +8,8 @@ export default function Home() {
   const chave = "123";
   const [loading, setLoading] = useState(false);
   const [access, setAccess] = useState(false);
-  const [doses, setDoses] = useState(0);
-  const [ultimaDose, setUltimaDose] = useState("");
+  const [porcoes, setPorcoes] = useState(0);
+  const [ultimaPorcao, setUltimaPorcao] = useState("");
 
   const registerUser = (event: any) => {
     event.preventDefault()
@@ -29,8 +29,8 @@ export default function Home() {
     setLoading(true);
     setTimeout(() => {
       alert("A ração foi liberada!");
-      setDoses(doses + 1);
-      setUltimaDose(novaData());
+      setPorcoes(porcoes + 1);
+      setUltimaPorcao(novaData());
       setLoading(false);
     }, 1000)
   }
@@ -71,12 +71,12 @@ export default function Home() {
         {!loading ?
           access ?
             <div className={styles.buttonFeed}>
-              {doses != 1 ?
-                <span>{doses} Doses</span>
+              {porcoes != 1 ?
+                <span>{porcoes} Porções</span>
                 :
-                <span>{doses} Dose</span>}
+                <span>{porcoes} Porção</span>}
               <button onClick={alimentar} className={`${styles.btn} ${styles.effect01}`}><span>alimentar</span></button>
-              <span>Ultima dose {ultimaDose}</span>
+              <span>Ultima dose {ultimaPorcao}</span>
             </div>
             :
             <form onSubmit={registerUser} className={styles.form}>
