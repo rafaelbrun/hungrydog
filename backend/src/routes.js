@@ -3,7 +3,11 @@ const InfoController = require('./controllers/InfoController');
 
 const routes = express.Router();
 
-routes.get('/infos', InfoController.index);
-routes.post('/infos', InfoController.create);
+routes.get('/infos/lendo/:id', InfoController.ler);
+
+routes.post('/infos/validando', InfoController.validar);
+routes.post('/infos/pedindo', InfoController.pedir);
+routes.post('/infos/finalizando', InfoController.finalizar);
+routes.post('/infos/create', InfoController.create);
 
 module.exports = routes;
