@@ -2,50 +2,51 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { useState } from 'react';
 import styles from '../styles/Home.module.css'
+import { ler, darRacao, validar } from '../src/service/alimentar';
 
 export default function Home() {
 
-  const chave = "123";
   const [loading, setLoading] = useState(false);
+  const [chave, setChave] = useState("");
   const [access, setAccess] = useState(false);
   const [porcoes, setPorcoes] = useState(0);
   const [ultimaPorcao, setUltimaPorcao] = useState("");
 
-  const registerUser = (event: any) => {
+  const validarChave = async (event: any) => {
+    setChave(event.target.name.value);
     event.preventDefault()
     setLoading(true);
-    //get chave
-    setTimeout(() => {
-      setLoading(false)
-      if (event.target.name.value == chave) {
+    try {
+      const resp = await validar("Payam Hungry", event.target.name.value);
+      if (resp.data.success) {
+        setPorcoes(resp.data.totalPorcoes);
+        setUltimaPorcao(resp.data.ultimaPorcao);
         setAccess(true);
       } else {
         alert("Chave de validação incorreta.");
       }
-    }, 1000);
+    } catch (e) {
+      alert(e);
+    }
+    setLoading(false);
   }
 
-  const alimentar = () => {
+  const alimentar = async () => {
     setLoading(true);
-    setTimeout(() => {
-      alert("A ração foi liberada!");
-      setPorcoes(porcoes + 1);
-      setUltimaPorcao(novaData());
-      setLoading(false);
-    }, 1000)
-  }
-
-  function novaData() {
-    var date = new Date().getDate();
-    var month = new Date().getMonth() + 1;
-    var year = new Date().getFullYear();
-    var hours = new Date().getHours();
-    var min = new Date().getMinutes();
-    var sec = new Date().getSeconds();
-    return (
-      date + '/' + month + '/' + year
-      + '  -  ' + hours + ':' + min + ':' + sec
-    );
+    const leitura = await ler();
+    if (leitura.data == "PEDINDO") {
+      alert("Aguarde, o Hungry Dog está em andamento!");
+    } else {
+      const respRacao = await darRacao("Payam Hungry", chave);
+      if (respRacao.data.success) {
+        setPorcoes(respRacao.data.totalPorcoes);
+        setUltimaPorcao(respRacao.data.ultimaPorcao);
+        alert("A solicitação foi enviada!");
+      } else {
+        alert("A solicitação falhou.");
+      }
+    }
+    setLoading(false);
   }
 
   return (
@@ -76,10 +77,10 @@ export default function Home() {
                 :
                 <span>{porcoes} Porção</span>}
               <button onClick={alimentar} className={`${styles.btn} ${styles.effect01}`}><span>alimentar</span></button>
-              <span>Ultima dose {ultimaPorcao}</span>
+              <span>Última porção {ultimaPorcao}</span>
             </div>
             :
-            <form onSubmit={registerUser} className={styles.form}>
+            <form onSubmit={validarChave} className={styles.form}>
               <label htmlFor="name">Informe a chave de validação</label>
               <div className={styles.inputDiv}>
                 <input id="name" type="text" autoComplete="name" required className={styles.field} />
