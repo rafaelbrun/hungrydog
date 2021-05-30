@@ -12,22 +12,74 @@ module.exports = {
       success: true,
       nome: nomeInfo[0]
     });
-
   },
 
-  async index(request, response) {
-    const nome = request.body.nome;
-    const chave = request.body.chave;
-    const info = await knex('infos').where({ nome: nome }).select('*').first();
-    if (chave == deCriptoChave(info.chave)) {
-      const infoResp = {
+  async validar(request, response) {
+    const body = request.body;
+    const info = await knex('infos').where({ nome: body.nome }).select('*').first();
+    if (body.chave == deCriptoChave(info.chave)) {
+      return response.json({
+        success: true,
         totalPorcoes: info.totalPorcoes,
         ultimaPorcao: info.ultimaPorcao,
-        status: info.status
-      }
-      return response.json(infoResp);
+      });
     }
+    return response.json({
+      success: false
+    })
+  },
 
+  async ler(request, response) {
+    const id = request.params.id;
+    if (id == 1) {
+      const info = await knex('infos').where({ nome: "Payam Hungry" }).select('*').first();
+      if (info.chave) {
+        return response.json(info.status);
+      }
+      return response.json({
+        success: false
+      })
+    }
+    return response.json({
+      success: false
+    })
+  },
+
+  async pedir(request, response) {
+    const body = request.body;
+    const info = await knex('infos').where({ nome: body.nome }).select('*').first();
+    if (body.chave == deCriptoChave(info.chave)) {
+      const newInfo = {
+        status: "PEDINDO",
+        totalPorcoes: info.totalPorcoes,
+        ultimaPorcao: info.ultimaPorcao
+      }
+      await knex('infos').where({ nome: body.nome }).update(newInfo);
+      return response.json({
+        success: true,
+        totalPorcoes: newInfo.totalPorcoes,
+        ultimaPorcao: newInfo.ultimaPorcao
+      })
+    }
+    return response.json({
+      success: false
+    })
+  },
+
+  async finalizar(request, response) {
+    const body = request.body;
+    const info = await knex('infos').where({ nome: body.nome }).select('*').first();
+    if (body.chave == deCriptoChave(info.chave)) {
+      const newInfo = {
+        totalPorcoes: info.totalPorcoes + 1,
+        ultimaPorcao: novaData(),
+        status: "PARADO"
+      }
+      await knex('infos').where({ nome: body.nome }).update(newInfo);
+      return response.json({
+        success: true
+      })
+    }
     return response.json({
       success: false
     })
@@ -43,11 +95,15 @@ function criptoChave(chave) {
 }
 
 function deCriptoChave(chave) {
-  console.log(chave);
   var encryptedArray = chave.split(':');
   var iv = new Buffer.from(encryptedArray[0], 'hex');
   var encrypted = new Buffer.from(encryptedArray[1], 'hex');
   const decipher = crypto.createDecipheriv(DADOS.algoritmo, DADOS.segredo, iv);
   const decrypted = decipher.update(encrypted);
   return Buffer.concat([decrypted, decipher.final()]).toString();
+}
+
+function novaData() {
+  var data = new Date().toLocaleString("pt-BR", { timeZone: "America/Cuiaba" });
+  return data.replace(/ /g, "  -  ");
 }
