@@ -34,7 +34,7 @@ export default function Home() {
   const alimentar = async () => {
     setLoading(true);
     const leitura = await ler();
-    if (leitura.data == "PEDINDO") {
+    if (leitura.data.status == "PEDINDO") {
       alert("Aguarde, o Hungry Dog está em andamento!");
     } else {
       const respRacao = await darRacao("Payam Hungry", chave);
@@ -83,7 +83,7 @@ export default function Home() {
             <form onSubmit={validarChave} className={styles.form}>
               <label htmlFor="name">Informe a chave de validação</label>
               <div className={styles.inputDiv}>
-                <input id="name" type="text" autoComplete="name" required className={styles.field} />
+                <input id="name" type="password" required className={styles.field} />
                 <button className={`${styles.btn} ${styles.effect01}`} type="submit"><span>validar</span></button>
               </div>
             </form>

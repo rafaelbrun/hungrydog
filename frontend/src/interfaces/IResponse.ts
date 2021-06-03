@@ -7,5 +7,7 @@ export interface ResponseValidarPedir {
 }
 
 export interface ResponseLer {
-  data: string
+  data: {
+    status: string
+  }
 }

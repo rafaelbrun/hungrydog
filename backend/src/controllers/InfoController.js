@@ -34,7 +34,9 @@ module.exports = {
     if (id == 1) {
       const info = await knex('infos').where({ nome: "Payam Hungry" }).select('*').first();
       if (info.chave) {
-        return response.json(info.status);
+        return response.json({
+          status: info.status
+        });
       }
       return response.json({
         success: false
@@ -67,18 +69,19 @@ module.exports = {
   },
 
   async finalizar(request, response) {
-    const body = request.body;
-    const info = await knex('infos').where({ nome: body.nome }).select('*').first();
-    if (body.chave == deCriptoChave(info.chave)) {
+    try {
+      const info = await knex('infos').where({ nome: "Payam Hungry" }).select('*').first();
       const newInfo = {
         totalPorcoes: info.totalPorcoes + 1,
         ultimaPorcao: novaData(),
         status: "PARADO"
       }
-      await knex('infos').where({ nome: body.nome }).update(newInfo);
+      await knex('infos').where({ nome: "Payam Hungry" }).update(newInfo);
       return response.json({
         success: true
       })
+    } catch (e) {
+      console.log(e);
     }
     return response.json({
       success: false
