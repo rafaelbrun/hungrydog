@@ -99,14 +99,18 @@ export default function Home() {
         }
       </main>
       <footer className={styles.footer}>
+        <div>
+          <p>Trabalho de Conclusão de Curso</p>
+          <p>Payam Kaffashi</p>
+          <p>payamkaffashi@hotmail.com</p>
+        </div>
         <a
-          href="http://ifmt.edu.br/"
+          href="https://www.ufmt.br/"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Made for {' '}
           <span className={styles.logo}>
-            <Image src="/assets/ifmt.svg" alt="Ifmt Logo" width={100} height={100} />
+            <Image src="/assets/ufmt.jpg" alt="Ufmt Logo" width={84} height={98} />
           </span>
         </a>
       </footer>
