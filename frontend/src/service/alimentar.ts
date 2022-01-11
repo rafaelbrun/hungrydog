@@ -5,7 +5,7 @@ export function validar(nome: string, chave: string): Promise<ResponseValidarPed
   return Promise.resolve(api.post('infos/validando', { nome, chave }, { timeout: 8000 }));
 }
 
-export function darRacao(nome: string, chave: string, quantidade: number): Promise<ResponseValidarPedir> {
+export function darRacao(nome: string, chave: string, quantidade: string): Promise<ResponseValidarPedir> {
   return Promise.resolve(api.post('infos/pedindo', { nome, chave, quantidade }, { timeout: 8000 }));
 }
 

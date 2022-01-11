@@ -3,7 +3,7 @@ exports.up = function (knex) {
 		table.string('nome').primary().notNullable();
 		table.string('chave').notNullable();
 		table.integer('totalPorcoes').notNullable();
-		table.integer('quantidade').notNullable();
+		table.string('quantidade').notNullable();
 		table.string('ultimaPorcao').notNullable();
 		table.string('status').notNullable();
 	});

@@ -11,7 +11,7 @@ export default function Home() {
   const [access, setAccess] = useState(false);
   const [porcoes, setPorcoes] = useState(0);
   const [ultimaPorcao, setUltimaPorcao] = useState("");
-  const [selectedQuantidade, setSelectedQuantidade] = useState(200);
+  const [selectedQuantidade, setSelectedQuantidade] = useState("200");
 
   const validarChave = async (event: any) => {
     setChave(event.target.name.value);
@@ -54,7 +54,7 @@ export default function Home() {
   }
 
   function handleOptionChange(changeEvent: any) {
-    setSelectedQuantidade(changeEvent.target.value);
+    setSelectedQuantidade(changeEvent.target.value.toString());
   }
 
   return (
@@ -84,19 +84,19 @@ export default function Home() {
               <form className={styles.radioForm}>
                 <div className={styles.radioDiv}>
                   <label>
-                    <input type="radio" value="200" checked={selectedQuantidade == 200} onChange={handleOptionChange}/>
+                    <input type="radio" value="200" checked={selectedQuantidade == "200"} onChange={handleOptionChange}/>
                     200 g
                   </label>
                 </div>
                 <div className={styles.radioDiv}>
                   <label>
-                    <input type="radio" value="350" checked={selectedQuantidade == 350} onChange={handleOptionChange}/>
+                    <input type="radio" value="350" checked={selectedQuantidade == "350"} onChange={handleOptionChange}/>
                     350 g
                   </label>
                 </div>
                 <div className={styles.radioDiv}>
                   <label>
-                    <input type="radio" value="500" checked={selectedQuantidade == 500} onChange={handleOptionChange}/>
+                    <input type="radio" value="500" checked={selectedQuantidade == "500"} onChange={handleOptionChange}/>
                     500 g
                   </label>
                 </div>

@@ -9,6 +9,6 @@ export interface ResponseValidarPedir {
 export interface ResponseLer {
   data: {
     status: string,
-    quantidade: number
+    quantidade: string
   }
 }
