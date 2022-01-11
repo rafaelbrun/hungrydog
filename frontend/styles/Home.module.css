@@ -48,7 +48,11 @@
 }
 
 .buttonFeed span{
-  margin-top: 2rem;
+  margin-top: 1.5rem;
+}
+
+.buttonFeed .spanUltima {
+  margin-top: 0;
 }
 
 .logo {
@@ -60,6 +64,10 @@
   flex-direction: column;
   margin-top: 2.2rem;
   align-items: center;
+}
+
+.radioForm {
+  margin-top: 1.2rem;
 }
 
 .inputDiv {

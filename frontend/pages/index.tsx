@@ -11,6 +11,7 @@ export default function Home() {
   const [access, setAccess] = useState(false);
   const [porcoes, setPorcoes] = useState(0);
   const [ultimaPorcao, setUltimaPorcao] = useState("");
+  const [selectedQuantidade, setSelectedQuantidade] = useState(200);
 
   const validarChave = async (event: any) => {
     setChave(event.target.name.value);
@@ -22,6 +23,9 @@ export default function Home() {
         setPorcoes(resp.data.totalPorcoes);
         setUltimaPorcao(resp.data.ultimaPorcao);
         setAccess(true);
+
+        const leitura = await ler();
+        setSelectedQuantidade(leitura.data.quantidade);
       } else {
         alert("Chave de validação incorreta.");
       }
@@ -37,7 +41,7 @@ export default function Home() {
     if (leitura.data.status == "PEDINDO") {
       alert("Aguarde, o Hungry Dog está em andamento!");
     } else {
-      const respRacao = await darRacao("Payam Hungry", chave);
+      const respRacao = await darRacao("Payam Hungry", chave, selectedQuantidade);
       if (respRacao.data.success) {
         setPorcoes(respRacao.data.totalPorcoes);
         setUltimaPorcao(respRacao.data.ultimaPorcao);
@@ -47,6 +51,10 @@ export default function Home() {
       }
     }
     setLoading(false);
+  }
+
+  function handleOptionChange(changeEvent: any) {
+    setSelectedQuantidade(changeEvent.target.value);
   }
 
   return (
@@ -72,12 +80,33 @@ export default function Home() {
         {!loading ?
           access ?
             <div className={styles.buttonFeed}>
+              <span>Selecione a quantidade da porção</span>
+              <form className={styles.radioForm}>
+                <div className={styles.radioDiv}>
+                  <label>
+                    <input type="radio" value="200" checked={selectedQuantidade == 200} onChange={handleOptionChange}/>
+                    200 g
+                  </label>
+                </div>
+                <div className={styles.radioDiv}>
+                  <label>
+                    <input type="radio" value="350" checked={selectedQuantidade == 350} onChange={handleOptionChange}/>
+                    350 g
+                  </label>
+                </div>
+                <div className={styles.radioDiv}>
+                  <label>
+                    <input type="radio" value="500" checked={selectedQuantidade == 500} onChange={handleOptionChange}/>
+                    500 g
+                  </label>
+                </div>
+              </form>
+              <button onClick={alimentar} className={`${styles.btn} ${styles.effect01}`}><span>alimentar</span></button>
               {porcoes != 1 ?
                 <span>{porcoes} Porções</span>
                 :
                 <span>{porcoes} Porção</span>}
-              <button onClick={alimentar} className={`${styles.btn} ${styles.effect01}`}><span>alimentar</span></button>
-              <span>Última porção {ultimaPorcao}</span>
+              <span className={styles.spanLast}>Última porção {ultimaPorcao}</span>
             </div>
             :
             <form onSubmit={validarChave} className={styles.form}>

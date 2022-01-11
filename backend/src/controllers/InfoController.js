@@ -10,7 +10,7 @@ module.exports = {
     const nomeInfo = await knex('infos').insert(info);
     return response.json({
       success: true,
-      nome: nomeInfo[0]
+      id: nomeInfo[0]
     });
   },
 
@@ -31,11 +31,13 @@ module.exports = {
 
   async ler(request, response) {
     const id = request.params.id;
+
     if (id == 1) {
       const info = await knex('infos').where({ nome: "Payam Hungry" }).select('*').first();
       if (info.chave) {
         return response.json({
-          status: info.status
+          status: info.status,
+          quantidade: info.quantidade
         });
       }
       return response.json({
@@ -53,12 +55,14 @@ module.exports = {
     if (body.chave == deCriptoChave(info.chave)) {
       const newInfo = {
         status: "PEDINDO",
+        quantidade: body.quantidade,
         totalPorcoes: info.totalPorcoes,
         ultimaPorcao: info.ultimaPorcao
       }
       await knex('infos').where({ nome: body.nome }).update(newInfo);
       return response.json({
         success: true,
+        quantidade: newInfo.quantidade,
         totalPorcoes: newInfo.totalPorcoes,
         ultimaPorcao: newInfo.ultimaPorcao
       })
