@@ -3,6 +3,8 @@ import Image from 'next/image'
 import { useState } from 'react';
 import styles from '../styles/Home.module.css'
 import { ler, darRacao, validar } from '../src/service/alimentar';
+import Loader from '../src/components/loader';
+import Footer from '../src/components/footer';
 
 export default function Home() {
 
@@ -117,32 +119,10 @@ export default function Home() {
               </div>
             </form>
           :
-          <div className={styles.gooey}>
-            <span className={styles.dot}></span>
-            <div className={styles.dots}>
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-          </div>
+          <Loader />
         }
       </main>
-      <footer className={styles.footer}>
-        <div>
-          <p>Trabalho de Conclusão de Curso</p>
-          <p>Payam Kaffashi</p>
-          <p>payamkaffashi@hotmail.com</p>
-        </div>
-        <a
-          href="https://www.ufmt.br/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <span className={styles.logo}>
-            <Image src="/assets/ufmt.jpg" alt="Ufmt Logo" width={84} height={98} />
-          </span>
-        </a>
-      </footer>
+      <Footer />
     </div>
   )
 }
